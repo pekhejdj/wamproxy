@@ -1,0 +1,22 @@
+{
+  "name": "wamproxy",
+  "main": "src/index.js",
+  "compatibility_date": "2024-01-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "PROJECT_NAME": "WamProxy",
+    "OWNER": "Flather Communications Inc.",
+    "VERSION": "1.0.0",
+    "CORS_ENABLED": "true",
+    "ALLOWED_ORIGINS": "*"
+  },
+  "routes": [
+    {
+      "pattern": "wamproxy.your-domain.com/*",
+      "custom_domain": true
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}
