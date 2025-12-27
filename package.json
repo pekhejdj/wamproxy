@@ -1,0 +1,26 @@
+{
+  "name": "wamproxy",
+  "version": "1.0.0",
+  "description": "HTTP proxy service with forced attachment downloads",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "echo \"No tests specified\" && exit 0",
+    "format": "prettier --write '**/*.{js,json,md}'"
+  },
+  "keywords": [
+    "proxy",
+    "cloudflare",
+    "worker",
+    "http",
+    "download"
+  ],
+  "author": "Flather Communications Inc.",
+  "license": "MIT",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20231218.0",
+    "prettier": "^3.2.4",
+    "wrangler": "^3.0.0"
+  }
+}
