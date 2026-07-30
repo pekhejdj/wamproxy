@@ -54,10 +54,8 @@ export default {
         });
       }
 
-      // Prepare request headers (forward incoming headers like content-type)
+      // Forward incoming headers (content-type, etc.)
       const forwardHeaders = new Headers(request.headers);
-      
-      // Remove host headers so target server accepts request
       forwardHeaders.delete('host');
       forwardHeaders.delete('referer');
 
@@ -65,25 +63,23 @@ export default {
         forwardHeaders.set('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
       }
 
-      // Forward request method & body (GET, POST, multipart, etc.)
-      const fetchInit = {
-        method: request.method,
-        headers: forwardHeaders,
-        redirect: 'follow'
-      };
-
-      // Only attach body for non-GET / non-HEAD requests
+      // Buffer POST/PUT body so Cloudflare doesn't drop stream bodies
+      let requestBody = null;
       if (request.method !== 'GET' && request.method !== 'HEAD') {
-        fetchInit.body = request.body;
+        requestBody = await request.arrayBuffer();
       }
 
-      const response = await fetch(targetUrl.toString(), fetchInit);
+      const response = await fetch(targetUrl.toString(), {
+        method: request.method,
+        headers: forwardHeaders,
+        body: requestBody
+      });
 
       // Prepare response headers & add CORS
       const responseHeaders = new Headers(response.headers);
       responseHeaders.set('Access-Control-Allow-Origin', '*');
       responseHeaders.set('Access-Control-Expose-Headers', '*');
-      responseHeaders.set('X-WamProxy-Version', '1.1.0');
+      responseHeaders.set('X-WamProxy-Version', '1.2.0');
       responseHeaders.set('X-WamProxy-Owner', 'Flather Communications Inc.');
 
       return new Response(response.body, {
